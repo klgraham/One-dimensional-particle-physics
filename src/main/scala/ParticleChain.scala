@@ -41,7 +41,7 @@ class ParticleChain(val length: Int = 80) {
 			println(this)
 			isSorted = isOrdered()
 		}
-		if (isSorted) println("Sorted in " + steps + " steps")
+		if (isSorted) println("Sorted in " + steps + " passes.")
 	}
 
 	// determine if n-1, n pair is out of order
