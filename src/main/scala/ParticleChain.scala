@@ -10,10 +10,17 @@ import util.Random
  * To change this template use File | Settings | File Templates.
  */
 class ParticleChain(val length: Int = 80) {
-	val chain = new ArrayBuffer[Int]
-	val random = new Random//(Calendar.getInstance().getTimeInMillis)
+	require(length % 2 == 0)
+	val chain: ArrayBuffer[Int] = new ArrayBuffer[Int]
+	val random: Random = new Random(Calendar.getInstance().getTimeInMillis)
+	val K: Int = 1 + random.nextInt(length-1)
 
-	def initialize() = for (n <- 0 until length) chain.append(if (n < length/2) 1 else 0)
+	def initialize() = {
+		if (chain.isEmpty)
+			for (n <- 0 until length) chain.append(if (n < length/2) 1 else 0)
+		else
+			for (n <- 0 until length) chain(n) = if (n < length/2) 1 else 0
+	}
 	initialize()
 
 	//swap the ptcls at n and n-1
@@ -24,10 +31,12 @@ class ParticleChain(val length: Int = 80) {
 		chain(n) = p1
 	}
 
-	// allow particles to move
+	// randomly select a pair and swap them if they're out of order
 	def step() {
-		// scan through chain and randomly swap out of order pairs
-		for (n <- 1 until length if isOutOfOrder(n) && (random.nextInt < 0.5)) swap(n)
+		val pairToSwap = 1 + random.nextInt(length-1)
+		if (isOutOfOrder(pairToSwap)){
+			swap(pairToSwap)
+		}
 	}
 
 	def equilibrate() {
@@ -39,9 +48,11 @@ class ParticleChain(val length: Int = 80) {
 			step()
 			steps += 1
 			println(this)
+			println("R_" + K + " = " + numParticlesToRightOf(K) + ", L_" + K + " = " + numVacanciesToLeftOf(K))
+			println("dR_" + K + " = " + numParticlesToRightOf(K).toFloat/steps.toFloat + ", dL_" + K + " = " + numVacanciesToLeftOf(K).toFloat/steps.toFloat + "\n")
 			isSorted = isOrdered()
 		}
-		if (isSorted) println("Sorted in " + steps + " passes.")
+		if (isSorted) println("Sorted in " + steps + " swaps.")
 	}
 
 	// determine if n-1, n pair is out of order
@@ -58,4 +69,10 @@ class ParticleChain(val length: Int = 80) {
 		for (n <- 1 until length) isOrdered &= !isOutOfOrder(n)
 		isOrdered
 	}
+
+	// r_k, the # of 1s to the right of site k, inclusive
+	def numParticlesToRightOf(k: Int): Int = (for (i <- k until length) yield chain(i)).sum
+
+	// l_k, the # of 0s to the left of site k, exclusive
+	def numVacanciesToLeftOf(k: Int): Int = (for (i <- 0 until k) yield if (chain(i) == 1) 0 else 1).sum
 }
