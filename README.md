@@ -1,5 +1,5 @@
 # One-dimensional Particle Physics and BubbleSort
-I recently perused Donald Knuth's website [knuth][1] and saw that he once had a lecture called "Constructing bubblesort at random: one-dimensional particle physics" [lecture][2]. As a physicist and software engineer, I naturally found this interesting. So this short bit of code takes a chain of 1s and 0s, as specified below, and sorts them at random. It also tells you how many passes it takes. Also, I'm not yet clear on how this relates to physics, at least not in a detailed sense. I'll have to think about that some more.
+I recently perused [Donald Knuth's website][1] and saw that he once had a lecture called ["Constructing bubblesort at random: one-dimensional particle physics"][2]. As a physicist and software engineer, I naturally found this interesting. So this short bit of code takes a chain of 1s and 0s, as specified below, and sorts them at random. It also tells you how many passes it takes. Also, I'm not yet clear on how this relates to physics, at least not in a detailed sense. I'll have to think about that some more.
 
 Here's a note from one of the papers Knuth linked to:
 
