@@ -11,5 +11,5 @@ The physics connection becomes a bit more clear if you imagine a 1D lattice, whe
 
 It might be interesting to track how $R_k$ and $L_k$ change with "time". Here, time means the number of random swaps needed to sort the list. For a long lattice, it might also be interesting to compute the distribution of 1s or 0s as a function of lattice site index. Then we could watch it change from all 1s on the left to all 1s on the right. Might look like a Heaviside Step Function inverting bit by bit.
 
-[1]: http://www-cs-faculty.stanford.edu/~knuth/musings.html "knuth"
-[2]: http://myvideos.stanford.edu/player/slplayer.aspx?coll=ea60314a-53b3-4be2-8552-dcf190ca0c0b&co=b276896a-4cc1-4d64-953c-7545af811f9c&o=true&AspxAutoDetectCookieSupport=1 "lecture"
+[1]: http://www-cs-faculty.stanford.edu/~knuth/musings.html
+[2]: http://myvideos.stanford.edu/player/slplayer.aspx?coll=ea60314a-53b3-4be2-8552-dcf190ca0c0b&co=b276896a-4cc1-4d64-953c-7545af811f9c&o=true&AspxAutoDetectCookieSupport=1
