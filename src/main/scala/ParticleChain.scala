@@ -9,8 +9,8 @@ import util.Random
  * Time: 7:39 AM
  * To change this template use File | Settings | File Templates.
  */
-class ParticleChain(val length: Int = 80) {
-	require(length % 2 == 0)
+class ParticleChain(val length: Int = 1000, verboseOutput: Boolean = false) {
+	require(length % 2 == 0, "Number of sites must be even.")
 	val chain: ArrayBuffer[Int] = new ArrayBuffer[Int]
 	val random: Random = new Random(Calendar.getInstance().getTimeInMillis)
 	val K: Int = 1 + random.nextInt(length-1)
@@ -39,15 +39,21 @@ class ParticleChain(val length: Int = 80) {
 		}
 	}
 
+	def takeNSteps(n: Int) = for (i <- 1 to n) step()
+
 	def equilibrate() {
 		var steps = 0
 		var isSorted = false
-		println(this)
+		if (verboseOutput) {
+			println(this)
+		}
 
 		while (!isSorted) {
 			step()
 			steps += 1
-			println(this)
+			if (verboseOutput) {
+				println(this)
+			}
 			println("R_" + K + " = " + numParticlesToRightOf(K) + ", L_" + K + " = " + numVacanciesToLeftOf(K))
 			println("dR_" + K + " = " + numParticlesToRightOf(K).toFloat/steps.toFloat + ", dL_" + K + " = " + numVacanciesToLeftOf(K).toFloat/steps.toFloat + "\n")
 			isSorted = isOrdered()
@@ -75,4 +81,19 @@ class ParticleChain(val length: Int = 80) {
 
 	// l_k, the # of 0s to the left of site k, exclusive
 	def numVacanciesToLeftOf(k: Int): Int = (for (i <- 0 until k) yield if (chain(i) == 1) 0 else 1).sum
+
+	// compute histogram of 1s. It's inverse is the histogram of 0s
+	def histogram1(binSize: Int): IndexedSeq[Int] = {
+		require(length % binSize == 0, "Number of sites (" + length + ") must be evenly divisible bin size!")
+
+		for(n <- binSize until length by binSize)
+			yield (for(m <- n-binSize until n) yield chain(m)).sum
+	}
+
+	// compute distribution of 1s. It's inverse is the distribution of 0s
+	def dist1(binSize: Int): IndexedSeq[Float] = {
+		require(length % binSize == 0, "Number of sites (" + length + ") must be evenly divisible bin size!")
+
+		histogram1(binSize) map {z => 2f * z.toFloat / length.toFloat} toIndexedSeq
+	}
 }
