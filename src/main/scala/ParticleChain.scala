@@ -9,7 +9,17 @@ import util.Random
  * Time: 7:39 AM
  * To change this template use File | Settings | File Templates.
  */
-class ParticleChain(val length: Int = 1000, verboseOutput: Boolean = false) {
+
+ object ParticleChain {
+ 	def main(args: Array[String]) {
+ 		val length = if (args.length == 1) Some(args(0).toInt) else None
+ 		
+ 		val pc = if (length isDefined) new ParticleChain (length.get, true) else new ParticleChain
+ 		pc.equilibrate()
+ 	}
+ }
+
+class ParticleChain(val length: Int = 100, verboseOutput: Boolean = false) {
 	require(length % 2 == 0, "Number of sites must be even.")
 	val chain: ArrayBuffer[Int] = new ArrayBuffer[Int]
 	val random: Random = new Random(Calendar.getInstance().getTimeInMillis)
@@ -54,8 +64,8 @@ class ParticleChain(val length: Int = 1000, verboseOutput: Boolean = false) {
 			if (verboseOutput) {
 				println(this)
 			}
-			println("R_" + K + " = " + numParticlesToRightOf(K) + ", L_" + K + " = " + numVacanciesToLeftOf(K))
-			println("dR_" + K + " = " + numParticlesToRightOf(K).toFloat/steps.toFloat + ", dL_" + K + " = " + numVacanciesToLeftOf(K).toFloat/steps.toFloat + "\n")
+			// println("R_" + K + " = " + numParticlesToRightOf(K) + ", L_" + K + " = " + numVacanciesToLeftOf(K))
+			// println("dR_" + K + " = " + numParticlesToRightOf(K).toFloat/steps.toFloat + ", dL_" + K + " = " + numVacanciesToLeftOf(K).toFloat/steps.toFloat + "\n")
 			isSorted = isOrdered()
 		}
 		if (isSorted) println("Sorted in " + steps + " swaps.")
@@ -66,7 +76,7 @@ class ParticleChain(val length: Int = 1000, verboseOutput: Boolean = false) {
 
 	override def toString(): String = {
 		val s = new StringBuilder
-		for (c <- chain) s.append(c)
+		for (c <- chain) if (c == 0) s.append("_") else s.append(c)
 		s.toString()
 	}
 
